@@ -42,9 +42,10 @@ const updateProduct = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
   const errors = validationResult(req)
   if(!errors.isEmpty()){
-    next(new Exception(200, "Mohon periksa kembali inputan anda").withData(errors.array()));
+    next(new Exception(500, "Data tidak valid").withData(errors.array()));
     return;
   }
+  
   const productQuery = ProductModel.findByIdAndDelete(req.params.productId);
   await productQuery.exec();
   res.json({
