@@ -1,7 +1,6 @@
 const assert = require('assert');
 const request = require('supertest');
 const app = require('../..');
-const ProductModel = require('../../src/models/product.model');
 
 describe("API Test Product", function(){
   var product;
