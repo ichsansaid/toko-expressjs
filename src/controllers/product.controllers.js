@@ -6,7 +6,7 @@ const ProductModel = require('../models/product.model');
 const createProduct = async (req, res, next) =>{
   const errors = validationResult(req)
   if(!errors.isEmpty()){
-    next(new Exception(500, "Mohon periksa kembali inputan anda").withData(errors.array()));
+    next(new Exception(200, "Mohon periksa kembali inputan anda").withData(errors.array()));
     return;
   }
   const product = new ProductModel({
@@ -15,7 +15,7 @@ const createProduct = async (req, res, next) =>{
     harga: req.body.harga
   });
   await product.save();
-  res.status(201).json({
+  res.status(200).json({
     message: "Produk berhasil dibuat",
     data: product
   })
@@ -24,7 +24,7 @@ const createProduct = async (req, res, next) =>{
 const updateProduct = async (req, res, next) => {
   const errors = validationResult(req)
   if(!errors.isEmpty()){
-    next(new Exception(500, "Mohon periksa kembali inputan anda").withData(errors.array()));
+    next(new Exception(200, "Mohon periksa kembali inputan anda").withData(errors.array()));
     return;
   }
   const productQuery = ProductModel.findByIdAndUpdate(req.params.productId, {
@@ -42,7 +42,7 @@ const updateProduct = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
   const errors = validationResult(req)
   if(!errors.isEmpty()){
-    next(new Exception(500, "Mohon periksa kembali inputan anda").withData(errors.array()));
+    next(new Exception(200, "Mohon periksa kembali inputan anda").withData(errors.array()));
     return;
   }
   const productQuery = ProductModel.findByIdAndDelete(req.params.productId);

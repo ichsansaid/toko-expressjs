@@ -16,6 +16,10 @@ class App {
     this.port = port;
   }
 
+  getApp(){
+    return this.app;
+  }
+
   connectDb() {
     mongoose.connect('mongodb://localhost:27017/toko-js', {
       useNewUrlParser: true,

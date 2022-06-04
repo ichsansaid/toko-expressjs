@@ -4,7 +4,7 @@
   "description": "Boilerplate yang digunakan untuk self project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll"
   },
   "author": "Muhammad Al Ichsan Nur Rizqi Said",
   "license": "ISC",
@@ -20,9 +20,8 @@
     "mongoose": "^6.3.5"
   },
   "devDependencies": {
-    "chai": "^4.3.6",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.16",
-    "request": "^2.88.2",
-    "should": "^13.2.3"
+    "supertest": "^6.2.3"
   }
 }
