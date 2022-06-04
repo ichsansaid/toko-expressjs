@@ -1,7 +1,14 @@
-import { create } from "connect-mongo";
-import ProductModel from "../models/product.model"
+const { validationResult } = require('express-validator');
+const { Error } = require('mongoose');
+const Exception = require('../exceptions/exception.error');
+const ProductModel = require('../models/product.model');
 
-const createProduct = async (req, res) =>{
+const createProduct = async (req, res, next) =>{
+  const errors = validationResult(req)
+  if(!errors.isEmpty()){
+    next(new Exception(500, "Mohon periksa kembali inputan anda").withData(errors.array()));
+    return;
+  }
   const product = new ProductModel({
     nama: req.body.nama,
     deskripsi: req.body.deskripsi,
@@ -10,12 +17,17 @@ const createProduct = async (req, res) =>{
   await product.save();
   res.status(201).json({
     message: "Produk berhasil dibuat",
-    data: produk
+    data: product
   })
 }
 
-const updateProduct = async (req, res) => {
-  const productQuery = ProductModel.findByIdAndUpdate(req.body.id, {
+const updateProduct = async (req, res, next) => {
+  const errors = validationResult(req)
+  if(!errors.isEmpty()){
+    next(new Exception(500, "Mohon periksa kembali inputan anda").withData(errors.array()));
+    return;
+  }
+  const productQuery = ProductModel.findByIdAndUpdate(req.params.productId, {
     nama: req.body.nama,
     deskripsi: req.body.deskripsi,
     harga: req.body.harga
@@ -27,15 +39,20 @@ const updateProduct = async (req, res) => {
   })
 }
 
-const deleteProduct = async (req, res) => {
-  const productQuery = ProductModel.findByIdAndDelete(req.body.id);
+const deleteProduct = async (req, res, next) => {
+  const errors = validationResult(req)
+  if(!errors.isEmpty()){
+    next(new Exception(500, "Mohon periksa kembali inputan anda").withData(errors.array()));
+    return;
+  }
+  const productQuery = ProductModel.findByIdAndDelete(req.params.productId);
   await productQuery.exec();
   res.json({
     message: "Produk berhasil dihapus"
   })
 }
 
-const listProduct = async (req, res) => {
+const listProduct = async (req, res, next) => {
   const productQuery = ProductModel.find({});
   const products = await productQuery.exec();
   res.json({
@@ -44,9 +61,9 @@ const listProduct = async (req, res) => {
   })
 }
 
-export default [
+module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
   listProduct,
-];
+};

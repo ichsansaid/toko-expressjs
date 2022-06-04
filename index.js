@@ -1,3 +1,3 @@
-import App from "./src/app";
+const App = require('./src/app.js');
 
-new App().run();
+new App(3006).run();

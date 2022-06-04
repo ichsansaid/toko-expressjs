@@ -5,29 +5,32 @@ const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
 const sessions = require('express-session');
 const MongoStore = require('connect-mongo');
+
+const indexRouter = require('./routers/index.router');
+const errorHandler = require('./midlewares/error.middleware');
+
 class App {
 
   constructor(port) {
-    this.express = null;
+    this.app = null;
     this.port = port;
   }
 
   connectDb() {
     mongoose.connect('mongodb://localhost:27017/toko-js', {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false
+      useUnifiedTopology: true
     });
   }
 
   listen() {
-    this.express.listen(this.port, function () {
-      console.log("== Server is running on port", port);
+    this.app.listen(this.port, function () {
+      console.log("== Server is running on port", this.port);
     });
   }
 
   initRouter() {
-    const router = require('../routers')(this.app);
+    this.app.use(indexRouter);
   }
 
   initMiddlewares() {
@@ -51,7 +54,7 @@ class App {
   }
 
   initErrorHandling() {
-    //this.app.use(ErrorHandler);
+    this.app.use(errorHandler);
   }
 
   initConfig() {
@@ -60,7 +63,7 @@ class App {
   }
 
   run() {
-    this.express = express();
+    this.app = express();
     this.connectDb();
     this.initMiddlewares()
     this.listen()
@@ -70,4 +73,4 @@ class App {
   }
 }
 
-export default App;
+module.exports = App;
