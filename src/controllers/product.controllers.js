@@ -58,7 +58,39 @@ const listProduct = async (req, res, next) => {
   const products = await productQuery.exec();
   res.json({
     message: "Berikut daftar keseluruhan Produk",
-    products: products
+    data: products
+  })
+}
+
+const addStokMasuk = async (req, res, next) => {
+  const errors = validationResult(req)
+  if(!errors.isEmpty()){
+    next(new Exception(500, "Data tidak valid").withData(errors.array()));
+    return;
+  }
+
+  const productQuery = ProductModel.findOne({_id: req.params.productId});
+  const product = productQuery.exec();
+  product.addStokMasuk(req.body.jumlah, req.body.keterangan, req.body.tanggal ?? new Date());
+  res.json({
+    message: "Stok product berhasil ditambahkan",
+    data: product
+  })
+}
+
+const addStokKeluar = async (req, res, next) => {
+  const errors = validationResult(req)
+  if(!errors.isEmpty()){
+    next(new Exception(500, "Data tidak valid").withData(errors.array()));
+    return;
+  }
+
+  const productQuery = ProductModel.findOne({_id: req.params.productId});
+  const product = productQuery.exec();
+  product.addStokKeluar(req.body.jumlah, req.body.keterangan, req.body.tanggal ?? new Date());
+  res.json({
+    message: "Stok product berhasil ditambahkan",
+    data: product
   })
 }
 
@@ -67,4 +99,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   listProduct,
+  addStokMasuk,
+  addStokKeluar,
 };

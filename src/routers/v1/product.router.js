@@ -46,4 +46,36 @@ productRouter.delete('/:productId/delete',
   productController.deleteProduct
 );
 
+productRouter.put(
+  '/:productId/addStokMasuk',
+  param('productId')
+    .custom(value => isValidObjectId(value)).withMessage("Produk tidak valid")
+    .custom(productIsExists).withMessage("Produk tidak ditemukan"),
+  body('jumlah')
+    .notEmpty().withMessage("Jumlah harus diisi")
+    .isNumeric().withMessage("Jumlah harus berupa angka"),
+  body('tanggal')
+    .notEmpty().withMessage("Tanggal stok masuk harus diisi")
+    .isDate().withMessage("Tanggal stok masuk harus berupa tanggal"),
+  body('keterangan')
+    .notEmpty().withMessage("Keterangan harus diisi"),
+  productController.addStokMasuk
+)
+
+productRouter.put(
+  '/:productId/addStokKeluar',
+  param('productId')
+    .custom(value => isValidObjectId(value)).withMessage("Produk tidak valid")
+    .custom(productIsExists).withMessage("Produk tidak ditemukan"),
+  body('jumlah')
+    .notEmpty().withMessage("Jumlah harus diisi")
+    .isNumeric().withMessage("Jumlah harus berupa angka"),
+  body('tanggal')
+    .notEmpty().withMessage("Tanggal stok masuk harus diisi")
+    .isDate().withMessage("Tanggal stok masuk harus berupa tanggal"),
+  body('keterangan')
+    .notEmpty().withMessage("Keterangan harus diisi"),
+  productController.addStokKeluar
+)
+
 module.exports = productRouter;
