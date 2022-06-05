@@ -24,15 +24,12 @@ describe("API Test Product", function(){
         harga: 5000
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "nama")){
-            return done();
-          }
-        }
-        return done(new Error("Nama kosong tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="nama"), true, "Nama kosong tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("POST /create --> validasi field harga jika kosong", function(done){
@@ -43,15 +40,12 @@ describe("API Test Product", function(){
         deskripsi: "Deskripsi"
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "harga")){
-            return done();
-          }
-        }
-        return done(new Error("Harga kosong tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="harga"), true, "Harga kosong tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("POST /create --> validasi field harga jika bukan angka", function(done){
@@ -63,15 +57,12 @@ describe("API Test Product", function(){
         harga: "Test"
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "harga")){
-            return done();
-          }
-        }
-        return done(new Error("Harga angka tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="harga"), true, "Harga angka tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("POST /create --> validasi field deskripsi jika kosong", function(done){
@@ -82,15 +73,12 @@ describe("API Test Product", function(){
         harga: 5000
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "deskripsi")){
-            return done();
-          }
-        }
-        return done(new Error("Deskripsi kosong tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="deskripsi"), true, "Deskripsi kosong tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("POST /create --> membuat produk", async function(){
@@ -125,15 +113,12 @@ describe("API Test Product", function(){
         harga: 5000
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "nama")){
-            return done();
-          }
-        }
-        return done(new Error("Nama kosong tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="nama"), true, "Nama kosong tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("PUT /update --> validasi field harga jika kosong", function(done){
@@ -144,15 +129,12 @@ describe("API Test Product", function(){
         deskripsi: "Deskripsi"
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "harga")){
-            return done();
-          }
-        }
-        return done(new Error("Harga kosong tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="harga"), true, "Harga kosong tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("PUT /update --> validasi field harga jika bukan angka", function(done){
@@ -164,15 +146,12 @@ describe("API Test Product", function(){
         harga: "Test"
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "harga")){
-            return done();
-          }
-        }
-        return done(new Error("Harga angka tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="harga"), true, "Harga angka tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("PUT /update --> validasi field deskripsi jika kosong", function(done){
@@ -183,15 +162,12 @@ describe("API Test Product", function(){
         harga: 5000
       })
       .set('Accept', 'application/json')
-      .end(function(err, res){
-        if(err) return done(err);
-        const { body } = res;
-        if('data' in body){
-          if(body.data.some(val => val.param == "deskripsi")){
-            return done();
-          }
-        }
-        return done(new Error("Deskripsi kosong tidak tervalidasi"));
+      .expect(res=>{
+        assert.equal(res.body.data.some(val=>val.param=="deskripsi"), true, "Deskripsi kosong tidak tervalidasi")
+      })
+      .end((err, res)=>{
+        if(err) done(err);
+        else done()
       })
   })
   it("DELETE /delete --> tidak internal server error", async () =>{
