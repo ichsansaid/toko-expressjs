@@ -5,9 +5,10 @@ var app = require('../..');
 const server = app.getServer();
 app = app.getApp();
 
-describe("API Test Product", function(){
-  var product;
-  it("POST /create --> tidak internal server error", function(done){
+var product;
+
+describe("POST /create", function(){
+  it("Tidak internal server error", function(done){
     request(app)
       .post('/v1/product/create')
       .send({})
@@ -19,7 +20,7 @@ describe("API Test Product", function(){
         done();
       })
   })
-  it("POST /create --> validasi field nama jika kosong", function(done){
+  it("Validasi field nama jika kosong", function(done){
     request(app)
       .post('/v1/product/create')
       .send({
@@ -35,7 +36,7 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("POST /create --> validasi field harga jika kosong", function(done){
+  it("Validasi field harga jika kosong", function(done){
     request(app)
       .post('/v1/product/create')
       .send({
@@ -51,7 +52,7 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("POST /create --> validasi field harga jika bukan angka", function(done){
+  it("Validasi field harga jika bukan angka", function(done){
     request(app)
       .post('/v1/product/create')
       .send({
@@ -68,7 +69,7 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("POST /create --> validasi field deskripsi jika kosong", function(done){
+  it("Validasi field deskripsi jika kosong", function(done){
     request(app)
       .post('/v1/product/create')
       .send({
@@ -84,7 +85,7 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("POST /create --> membuat produk", async function(){
+  it("Membuat produk", async function(){
     const { body } = await request(app)
       .post('/v1/product/create')
       .set('Accept', 'application/json')
@@ -95,8 +96,10 @@ describe("API Test Product", function(){
       })
     product = body.data;
   })
-  //Update
-  it("PUT /update --> tidak internal server error", function(done){
+})
+
+describe("PUT /update", function(){
+  it("Tidak internal server error", function(done){
     request(app)
       .put('/v1/product/' + product._id + '/update')
       .send({})
@@ -108,7 +111,7 @@ describe("API Test Product", function(){
         done();
       })
   })
-  it("PUT /update --> validasi field nama jika kosong", function(done){
+  it("Validasi field nama jika kosong", function(done){
     request(app)
       .put('/v1/product/' + product._id + '/update')
       .send({
@@ -124,7 +127,7 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("PUT /update --> validasi field harga jika kosong", function(done){
+  it("Validasi field harga jika kosong", function(done){
     request(app)
       .put('/v1/product/' + product._id + '/update')
       .send({
@@ -140,7 +143,7 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("PUT /update --> validasi field harga jika bukan angka", function(done){
+  it("Validasi field harga jika bukan angka", function(done){
     request(app)
       .put('/v1/product/' + product._id + '/update')
       .send({
@@ -157,7 +160,7 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("PUT /update --> validasi field deskripsi jika kosong", function(done){
+  it("Validasi field deskripsi jika kosong", function(done){
     request(app)
       .put('/v1/product/' + product._id + '/update')
       .send({
@@ -173,7 +176,10 @@ describe("API Test Product", function(){
         else done()
       })
   })
-  it("DELETE /delete --> tidak internal server error", async () =>{
+})
+
+describe("DELETE /delete", function(){
+  it("Tidak internal server error", async () =>{
     console.log('/v1/product/' + product._id + '/delete')
     await request(app)
       .delete('/v1/product/' + product._id + '/delete')
