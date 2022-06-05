@@ -28,9 +28,13 @@ class App {
   }
 
   listen() {
-    this.app.listen(this.port, function () {
+    this.server = this.app.listen(this.port, function () {
       console.log("== Server is running on port", this.port);
     });
+  }
+
+  getServer(){
+    return this.server;
   }
 
   initRouter() {

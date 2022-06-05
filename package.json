@@ -4,7 +4,7 @@
   "description": "Boilerplate yang digunakan untuk self project",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest --watchAll --maxWorkers=1"
   },
   "author": "Muhammad Al Ichsan Nur Rizqi Said",
   "license": "ISC",

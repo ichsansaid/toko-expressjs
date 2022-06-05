@@ -1,6 +1,9 @@
 const assert = require('assert');
 const request = require('supertest');
-const app = require('../..');
+var app = require('../..');
+
+const server = app.getServer();
+app = app.getApp();
 
 describe("API Test Product", function(){
   var product;
@@ -178,4 +181,8 @@ describe("API Test Product", function(){
       .set('Accept', 'application/json')
       .expect(200)
   })
+})
+
+afterAll(()=>{
+  server.close();
 })
