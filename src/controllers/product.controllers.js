@@ -23,16 +23,17 @@ const createProduct = async (req, res, next) =>{
 
 const updateProduct = async (req, res, next) => {
   const errors = validationResult(req)
+  
   if(!errors.isEmpty()){
     next(new Exception(200, "Mohon periksa kembali inputan anda").withData(errors.array()));
     return;
   }
-  const productQuery = ProductModel.findByIdAndUpdate(req.params.productId, {
+  console.log(res.body);
+  const product = await ProductModel.findByIdAndUpdate(req.params.productId, {
     nama: req.body.nama,
     deskripsi: req.body.deskripsi,
     harga: req.body.harga
-  });
-  const product = await productQuery.exec();
+  }, { new: true });
   res.json({
     message: "Produk berhasil diperbaharui",
     data: product
@@ -42,10 +43,10 @@ const updateProduct = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
   const errors = validationResult(req)
   if(!errors.isEmpty()){
-    next(new Exception(500, "Data tidak valid").withData(errors.array()));
+    next(new Exception(200, "Data tidak valid").withData(errors.array()));
     return;
   }
-  
+  console.log(req.params);
   const productQuery = ProductModel.findByIdAndDelete(req.params.productId);
   await productQuery.exec();
   res.json({
@@ -70,8 +71,9 @@ const addStokMasuk = async (req, res, next) => {
   }
 
   const productQuery = ProductModel.findOne({_id: req.params.productId});
-  const product = productQuery.exec();
+  const product = await productQuery.exec();
   product.addStokMasuk(req.body.jumlah, req.body.keterangan, req.body.tanggal ?? new Date());
+  product.save();
   res.json({
     message: "Stok product berhasil ditambahkan",
     data: product
@@ -86,8 +88,9 @@ const addStokKeluar = async (req, res, next) => {
   }
 
   const productQuery = ProductModel.findOne({_id: req.params.productId});
-  const product = productQuery.exec();
+  const product = await productQuery.exec();
   product.addStokKeluar(req.body.jumlah, req.body.keterangan, req.body.tanggal ?? new Date());
+  product.save();
   res.json({
     message: "Stok product berhasil ditambahkan",
     data: product

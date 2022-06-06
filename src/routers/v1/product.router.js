@@ -1,8 +1,9 @@
 const app = require('express');
 const { body, param, validationResult } = require('express-validator');
-const { isValidObjectId, Types } = require('mongoose');
+const { isValidObjectId, Types, default: mongoose } = require('mongoose');
 
-const productRouter = app.Router();
+const productRouter = app.Router({mergeParams: true});
+const childRouter = app.Router({mergeParams: true});
 const productController = require('../../controllers/product.controllers');
 const { productIsExists } = require('../../validators/product.validator');
 
@@ -23,11 +24,10 @@ productRouter.post(
   productController.createProduct
 );
 
-productRouter.put(
-  '/:productId/update',
-  param('productId')
-    .custom(value => isValidObjectId(value)).withMessage("Produk tidak valid")
-    .custom(productIsExists).withMessage("Produk tidak ditemukan"),
+
+
+childRouter.put(
+  '/update',
   body('nama')
     .notEmpty().withMessage("Nama harus diisi"),
   body('deskripsi')
@@ -38,19 +38,12 @@ productRouter.put(
   productController.updateProduct
 );
 
-productRouter.delete('/:productId/delete',
-  param('productId')
-    .custom(value => isValidObjectId(value)).withMessage("Produk tidak valid")
-    .customSanitizer(value => Types.ObjectId(value))
-    .custom(productIsExists).withMessage("Produk tidak ditemukan"),
+childRouter.delete('/delete',
   productController.deleteProduct
 );
 
-productRouter.put(
-  '/:productId/addStokMasuk',
-  param('productId')
-    .custom(value => isValidObjectId(value)).withMessage("Produk tidak valid")
-    .custom(productIsExists).withMessage("Produk tidak ditemukan"),
+childRouter.put(
+  '/addStokMasuk',
   body('jumlah')
     .notEmpty().withMessage("Jumlah harus diisi")
     .isNumeric().withMessage("Jumlah harus berupa angka"),
@@ -62,11 +55,8 @@ productRouter.put(
   productController.addStokMasuk
 )
 
-productRouter.put(
-  '/:productId/addStokKeluar',
-  param('productId')
-    .custom(value => isValidObjectId(value)).withMessage("Produk tidak valid")
-    .custom(productIsExists).withMessage("Produk tidak ditemukan"),
+childRouter.put(
+  '/addStokKeluar',
   body('jumlah')
     .notEmpty().withMessage("Jumlah harus diisi")
     .isNumeric().withMessage("Jumlah harus berupa angka"),
@@ -77,5 +67,15 @@ productRouter.put(
     .notEmpty().withMessage("Keterangan harus diisi"),
   productController.addStokKeluar
 )
+
+productRouter.use('/:productId', 
+  param('productId')
+    .custom(value => isValidObjectId(value)).withMessage("Produk tidak valid")
+    .custom(productIsExists).withMessage("Produk tidak ditemukan"),
+  childRouter
+)
+
+
+
 
 module.exports = productRouter;
