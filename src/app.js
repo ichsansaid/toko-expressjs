@@ -28,7 +28,7 @@ class App {
   }
 
   listen() {
-    this.server = this.app.listen(this.port, function () {
+    this.server = this.app.listen(this.port, ()=> {
       console.log("== Server is running on port", this.port);
     });
   }

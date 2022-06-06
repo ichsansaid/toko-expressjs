@@ -52,6 +52,8 @@ childRouter.put(
     .isDate().withMessage("Tanggal stok masuk harus berupa tanggal"),
   body('keterangan')
     .notEmpty().withMessage("Keterangan harus diisi"),
+  body('jenis')
+    .isIn(['MASUK', 'KELUAR']).withMessage("Jenis tidak sesuai"),
   productController.addStokMasuk
 )
 
