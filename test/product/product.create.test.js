@@ -8,6 +8,11 @@ const server = app.getServer();
 app = app.getApp();
 
 var product;
+const productTest = {
+  nama: "NamaTest",
+  deskripsi: "DeskripsiTest",
+  harga: 5000
+}
 
 describe("POST /create", function(){
   it("Tidak internal server error", function(done){
@@ -79,11 +84,11 @@ describe("POST /create", function(){
     const { body } = await request(app)
       .post('/v1/product/create')
       .set('Accept', 'application/json')
-      .send({
-        nama: "ProductTest",
-        harga: 5000,
-        deskripsi: "DeskripsiTest"
-      })
+      .send(productTest)
+    
+    assert.equal(productTest.nama, body.data.nama, "Field nama yang tersimpan tidak sesuai");
+    assert.equal(productTest.deskripsi, body.data.deskripsi, "Field deskripsi yang tersimpan tidak sesuai");
+    assert.equal(productTest.harga, body.data.harga, "Field harga yang tersimpan tidak sesuai");
     product = body.data;
   })
 })

@@ -26,12 +26,14 @@ productSchema.virtual('jumlah_stok').get(()=>{
   return jumlah;
 })
 
-productSchema.methods.addStokMasuk = (jumlah, keterangan, tanggal = new Date()) =>{
+productSchema.methods.addStokMasuk = function(jumlah, jenis, keterangan, tanggal = new Date()){
   this.stok.push({
     tanggal: tanggal,
     jumlah: jumlah,
-    keterangan: keterangan
+    keterangan: keterangan,
+    jenis: jenis
   });
+  return this.stok[this.stok.length-1];
 }
 
 productSchema.methods.addStokKeluar = (jumlah, keterangan, tanggal = new Date()) => {

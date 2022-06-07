@@ -28,7 +28,6 @@ const updateProduct = async (req, res, next) => {
     next(new Exception(200, "Mohon periksa kembali inputan anda").withData(errors.array()));
     return;
   }
-  console.log(res.body);
   const product = await ProductModel.findByIdAndUpdate(req.params.productId, {
     nama: req.body.nama,
     deskripsi: req.body.deskripsi,
@@ -69,14 +68,16 @@ const addStokMasuk = async (req, res, next) => {
     next(new Exception(500, "Data tidak valid").withData(errors.array()));
     return;
   }
-
   const productQuery = ProductModel.findOne({_id: req.params.productId});
   const product = await productQuery.exec();
-  product.addStokMasuk(req.body.jumlah, req.body.keterangan, req.body.tanggal ?? new Date());
-  product.save();
+  const stok = product.addStokMasuk(req.body.jumlah, req.body.jenis, req.body.keterangan, req.body.tanggal ?? new Date());
+  await product.save();
   res.json({
     message: "Stok product berhasil ditambahkan",
-    data: product
+    data: {
+      product: product,
+      stok: stok
+    }
   })
 }
 

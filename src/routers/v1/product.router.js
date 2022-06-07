@@ -6,6 +6,7 @@ const productRouter = app.Router({mergeParams: true});
 const childRouter = app.Router({mergeParams: true});
 const productController = require('../../controllers/product.controllers');
 const { productIsExists } = require('../../validators/product.validator');
+const isDate = require('../../validators/validator');
 
 productRouter.get(
   '/',
@@ -23,8 +24,6 @@ productRouter.post(
     .isNumeric().withMessage("Harga hanya boleh angka"),
   productController.createProduct
 );
-
-
 
 childRouter.put(
   '/update',
@@ -49,7 +48,7 @@ childRouter.put(
     .isNumeric().withMessage("Jumlah harus berupa angka"),
   body('tanggal')
     .notEmpty().withMessage("Tanggal stok masuk harus diisi")
-    .isDate().withMessage("Tanggal stok masuk harus berupa tanggal"),
+    .isISO8601().withMessage("Tanggal stok tidak sesuai format"),
   body('keterangan')
     .notEmpty().withMessage("Keterangan harus diisi"),
   body('jenis')
@@ -64,7 +63,7 @@ childRouter.put(
     .isNumeric().withMessage("Jumlah harus berupa angka"),
   body('tanggal')
     .notEmpty().withMessage("Tanggal stok masuk harus diisi")
-    .isDate().withMessage("Tanggal stok masuk harus berupa tanggal"),
+    .isISO8601().withMessage("Tanggal stok masuk harus berupa tanggal"),
   body('keterangan')
     .notEmpty().withMessage("Keterangan harus diisi"),
   productController.addStokKeluar
@@ -76,8 +75,5 @@ productRouter.use('/:productId',
     .custom(productIsExists).withMessage("Produk tidak ditemukan"),
   childRouter
 )
-
-
-
 
 module.exports = productRouter;
