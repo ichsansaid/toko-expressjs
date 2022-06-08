@@ -6,7 +6,6 @@ const productRouter = app.Router({mergeParams: true});
 const childRouter = app.Router({mergeParams: true});
 const productController = require('../../controllers/product.controllers');
 const { productIsExists } = require('../../validators/product.validator');
-const isDate = require('../../validators/validator');
 
 productRouter.get(
   '/',
