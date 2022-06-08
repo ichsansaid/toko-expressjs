@@ -13,13 +13,13 @@ const product = new ProductModel({
   harga: 5000
 });
 
-describe("PUT /addStokMasuk", function(){
+describe("PUT /addStok", function(){
   it("Membuat produk untuk unit testing", async function(){
     await product.save();
   });
   it("Validasi Product id jika tidak berupa ObjectId", async function(){
     const res = await request(app)
-      .put('/v1/product/test/addStokMasuk')
+      .put('/v1/product/test/addStok')
       .send({})
       .set('Accept', 'application/json');
     
@@ -29,7 +29,7 @@ describe("PUT /addStokMasuk", function(){
   })
   it("Validasi product id jika tidak ada product", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + 'c/addStokMasuk')
+      .put('/v1/product/' + product._id + 'c/addStok')
       .send({})
       .set('Accept', 'application/json');
     assert.equal('data' in res.body, true, "Data response tidak ada");
@@ -38,7 +38,7 @@ describe("PUT /addStokMasuk", function(){
   })
   it("Validasi field tanggal jika tanggal kosong", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send({
         keterangan: "Test",
         jenis: "MASUK",
@@ -51,7 +51,7 @@ describe("PUT /addStokMasuk", function(){
   })
   it("Validasi field tanggal jika format tidak sesuai", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send({
         tanggal: "Mantap",
         keterangan: "Test",
@@ -66,7 +66,7 @@ describe("PUT /addStokMasuk", function(){
   })
   it("Validasi field tanggal jika keterangan kosong", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send({
         tanggal: new Date(),
         jenis: "MASUK",
@@ -79,7 +79,7 @@ describe("PUT /addStokMasuk", function(){
   })
   it("Validasi field jenis jika kosong", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send({
         tanggal: new Date(),
         keterangan: "Keterangan",
@@ -92,7 +92,7 @@ describe("PUT /addStokMasuk", function(){
   })
   it("Validasi field jenis jika tidak sesuai", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send({
         jenis: "bukan",
         tanggal: new Date(),
@@ -101,12 +101,12 @@ describe("PUT /addStokMasuk", function(){
       })
       .set('Accept', 'application/json');
     assert.equal('data' in res.body, true, "Data response tidak ada");
-    assert.equal(Array.isArray(res.body.data), true, "Data response harus berupa array")
+    assert.equal(Array.isArray(res.body.data), true, "Data response harus berupa array");
     assert.equal(res.body.data.some(val=>val.param=="jenis"), true, "Jenis kosong tidak tervalidasi");
   })
   it("Validasi field jumlah jika kosong", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send({
         jenis: "MASUK",
         tanggal: new Date(),
@@ -119,7 +119,7 @@ describe("PUT /addStokMasuk", function(){
   })
   it("Validasi field jumlah jika sesuai format", async function(){
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send({
         jenis: "MASUK",
         tanggal: new Date(),
@@ -139,7 +139,7 @@ describe("PUT /addStokMasuk", function(){
       jumlah: 10
     }
     const res = await request(app)
-      .put('/v1/product/' + product._id + '/addStokMasuk')
+      .put('/v1/product/' + product._id + '/addStok')
       .send(stok)
       .set('Accept', 'application/json');
     assert.equal('data' in res.body, true, "Data response tidak ada");

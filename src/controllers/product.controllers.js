@@ -62,7 +62,7 @@ const listProduct = async (req, res, next) => {
   })
 }
 
-const addStokMasuk = async (req, res, next) => {
+const addStok = async (req, res, next) => {
   const errors = validationResult(req)
   if(!errors.isEmpty()){
     next(new Exception(500, "Data tidak valid").withData(errors.array()));
@@ -81,28 +81,10 @@ const addStokMasuk = async (req, res, next) => {
   })
 }
 
-const addStokKeluar = async (req, res, next) => {
-  const errors = validationResult(req)
-  if(!errors.isEmpty()){
-    next(new Exception(500, "Data tidak valid").withData(errors.array()));
-    return;
-  }
-
-  const productQuery = ProductModel.findOne({_id: req.params.productId});
-  const product = await productQuery.exec();
-  product.addStokKeluar(req.body.jumlah, req.body.keterangan, req.body.tanggal ?? new Date());
-  product.save();
-  res.json({
-    message: "Stok product berhasil ditambahkan",
-    data: product
-  })
-}
-
 module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
   listProduct,
-  addStokMasuk,
-  addStokKeluar,
+  addStok
 };

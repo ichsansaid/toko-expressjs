@@ -42,7 +42,7 @@ childRouter.delete('/delete',
 );
 
 childRouter.put(
-  '/addStokMasuk',
+  '/addStok',
   body('jumlah')
     .notEmpty().withMessage("Jumlah harus diisi")
     .isNumeric().withMessage("Jumlah harus berupa angka"),
@@ -53,20 +53,7 @@ childRouter.put(
     .notEmpty().withMessage("Keterangan harus diisi"),
   body('jenis')
     .isIn(['MASUK', 'KELUAR']).withMessage("Jenis tidak sesuai"),
-  productController.addStokMasuk
-)
-
-childRouter.put(
-  '/addStokKeluar',
-  body('jumlah')
-    .notEmpty().withMessage("Jumlah harus diisi")
-    .isNumeric().withMessage("Jumlah harus berupa angka"),
-  body('tanggal')
-    .notEmpty().withMessage("Tanggal stok masuk harus diisi")
-    .isISO8601().withMessage("Tanggal stok masuk harus berupa tanggal"),
-  body('keterangan')
-    .notEmpty().withMessage("Keterangan harus diisi"),
-  productController.addStokKeluar
+  productController.addStok
 )
 
 productRouter.use('/:productId', 
