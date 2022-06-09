@@ -10,5 +10,12 @@ const transactionSchema = new Schema({
     }
   }],
   tanggal_transaksi: Date,
-  status: Boolean,
+  status: {
+    type: String,
+    enum: ["PENDING", "SUCCESS"]
+  },
 })
+
+const TransactionModel = mongoose.model('Transaction', transactionSchema);
+
+module.exports = TransactionModel;

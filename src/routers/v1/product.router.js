@@ -4,7 +4,7 @@ const { isValidObjectId, Types, default: mongoose } = require('mongoose');
 
 const productRouter = app.Router({mergeParams: true});
 const childRouter = app.Router({mergeParams: true});
-const productController = require('../../controllers/product.controllers');
+const productController = require('../../controllers/product.controller');
 const { productIsExists } = require('../../validators/product.validator');
 
 productRouter.get(
