@@ -5,7 +5,7 @@ const transactionSchema = new Schema({
   products: [{
     jumlah: Number,
     product: {
-      type: mongoose.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'product'
     }
   }],

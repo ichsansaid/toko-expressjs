@@ -15,13 +15,12 @@ transactionRouter.post(
   body('products')
     .isArray().withMessage("Produk harus berisikan daftar")
     .custom(async value=>{
-      for(let productId of value){
-        if(!isValidObjectId(productId)){
-          console.log("Goblok Test" + productId);
+      for(let { product } of value){
+        if(!isValidObjectId(product)){
           return Promise.reject();
         }
-        productId = Types.ObjectId(productId);
-        const bool = await ProductModel.exists({_id: productId});
+        product = Types.ObjectId(product);
+        const bool = await ProductModel.exists({_id: product});
         if(!bool)
           return Promise.reject();
       }
