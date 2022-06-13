@@ -119,6 +119,6 @@ describe("PUT /update", function(){
 })
 
 afterAll(async ()=>{
-  await ProductModel.findByIdAndDelete(product._id);
+  await ProductModel.deleteOne({_id: product._id});
   server.close();
 })

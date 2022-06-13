@@ -10,12 +10,7 @@ const createTransaction = async (req, res, next) =>{
     next(new Exception(200, "Mohon periksa kembali inputan anda").withData(errors.array()));
     return;
   }
-  const transaction = new TransactionModel({
-    tanggal_transaksi: req.body.tanggal_transaksi,
-    status: req.body.status,
-    products: req.body.products
-  });
-  await transaction.save();
+  const transaction = await TransactionModel.createTransaction(req.body.products, req.body.tanggal_transaksi);
   res.status(200).json({
     message: "Transaksi berhasil dibuat",
     data: transaction

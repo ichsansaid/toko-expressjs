@@ -3,6 +3,8 @@ const request = require('supertest');
 const expect = require('supertest');
 var app = require('../..');
 const ProductModel = require('../../src/models/product.model');
+const StokModel = require('../../src/models/stok.model');
+const TransactionModel = require('../../src/models/transaction.model');
 
 const server = app.getServer();
 app = app.getApp();
@@ -26,5 +28,22 @@ describe("DELETE /delete", function(){
       .expect(200)
 
     assert.equal(await ProductModel.exists({_id: id}), null, "Produk tidak berhasil dihapus");
+    assert.equal(await StokModel.exists({product: id}), null, "Stok produk tidak berhasil dihapus");
+    const transaction = await TransactionModel.aggregate([
+      {
+        $lookup:{
+          from: "stok",
+          foreignField: "stok",
+          localField: "stok",
+          as: "stoks"
+        }
+      },
+      {
+        $match: {
+          'stoks.product': id
+        }
+      }
+    ]);
+    assert.equal(transaction.length, 0, "Transaksi produk tidak berhasil dihapus")
   })
 })

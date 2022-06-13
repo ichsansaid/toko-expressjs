@@ -33,7 +33,7 @@ describe("POST  /transaction", function(){
       await product.save();
       products.push({
         jumlah: i+1,
-        product: product._id
+        product: "" + product._id
       });
     }
     transaction = {
@@ -104,14 +104,19 @@ describe("POST  /transaction", function(){
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200)
+    console.log(res.body)
     assert.equal('data' in res.body, true, "Data response tidak ada");
     assert.equal(new Date(res.body.data.tanggal_transaksi).getTime(), transaction.tanggal_transaksi.getTime(), "Tanggal transaksi tidak sesuai");
+    assert.deepEqual(res.body.data.products.map(value=>{ return { jumlah: value.jumlah, product: value.product} }), transaction.products, "Produk transaksi tidak sesuai");
     transaction = res.body.data;
   })
+
 })
 
 afterAll(async ()=>{
-  await ProductModel.deleteMany({_id: { $in : products.map(value=>value.product)}});
+  for(let {product} of products){
+    await ProductModel.deleteOne({_id: product});
+  }
   await TransactionModel.findByIdAndDelete(Types.ObjectId(transaction._id));
   server.close();
 })

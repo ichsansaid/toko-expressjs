@@ -68,9 +68,8 @@ const addStok = async (req, res, next) => {
     next(new Exception(500, "Data tidak valid").withData(errors.array()));
     return;
   }
-  const productQuery = ProductModel.findOne({_id: req.params.productId});
-  const product = await productQuery.exec();
-  const stok = product.addStokMasuk(req.body.jumlah, req.body.jenis, req.body.keterangan, req.body.tanggal ?? new Date());
+  const product = await ProductModel.findOne({_id: req.params.productId});
+  const stok = await product.addStok(req.body.jumlah, req.body.jenis, req.body.keterangan, req.body.tanggal ?? new Date());
   await product.save();
   res.json({
     message: "Stok product berhasil ditambahkan",

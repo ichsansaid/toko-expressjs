@@ -1,48 +1,61 @@
 const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const StokModel = require('./stok.model');
+const TransactionModel = require('./transaction.model');
+const { Schema } = mongoose;
 
 const productSchema = new Schema({
   nama: String,
   deskripsi: String,
-  harga: Number,
-  stok: [
-    {
-      tanggal: Date,
-      keterangan: String,
-      jenis: {
-        type: String,
-        enum: ['MASUK', 'KELUAR']
-      },
-      jumlah: Number
-    }
-  ]
+  harga: Number
 })
 
-productSchema.virtual('jumlah_stok').get(()=>{
+productSchema.pre('deleteOne', async function () {
+  const doc = await this.model.findOne(this.getFilter());
+  if(doc != null){
+    const stok = await StokModel.find({product: doc._id});
+    await TransactionModel.deleteMany({
+      stok: {
+        "$in": stok.map(value=>value._id)
+      }
+    })
+    await StokModel.deleteMany({
+      product: doc._id
+    })
+  }
+  
+})
+
+productSchema.methods.getJumlahStok = async function () {
   let jumlah = 0;
-  for(let value in stok){
-    jumlah+=(value.jenis == 'MASUK' ? 1 : -1) * value.jumlah;
+  const stok = await StokModel.find({product: this._id});
+  for (let value in this.stok) {
+    jumlah += (value.jenis == 'MASUK' ? 1 : -1) * value.jumlah;
   }
   return jumlah;
-})
+}
 
-productSchema.methods.addStokMasuk = function(jumlah, jenis, keterangan, tanggal = new Date()){
-  this.stok.push({
-    tanggal: tanggal,
+productSchema.methods.getStok = async function() {
+  const stok = await StokModel.find({product: this._id});
+  return stok;
+}
+
+productSchema.methods.addStok = async function (jumlah, jenis, keterangan, tanggal = new Date()) {
+  const stok = new StokModel({
+    product: this._id,
     jumlah: jumlah,
     keterangan: keterangan,
+    tanggal: tanggal,
     jenis: jenis
-  });
-  return this.stok[this.stok.length-1];
+  })
+  await stok.save();
+  return stok;
 }
 
-productSchema.methods.addStokKeluar = (jumlah, keterangan, tanggal = new Date()) => {
-  this.stok.push({
-    tanggal: tanggal,
-    jumlah: jumlah,
-    keterangan: keterangan,
-  })
+productSchema.methods.addStokTransaction = async function (jumlah, keterangan, tanggal = new Date()) {
+  const stok = await this.addStok(jumlah, "KELUAR", "Transaction Flow, " + keterangan, tanggal);
+  return stok;
 }
+
 
 const ProductModel = mongoose.model('Product', productSchema);
 

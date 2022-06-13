@@ -3,6 +3,7 @@ const request = require('supertest');
 const expect = require('supertest');
 var app = require('../..');
 const ProductModel = require('../../src/models/product.model');
+const StokModel = require('../../src/models/stok.model');
 
 const server = app.getServer();
 app = app.getApp();
@@ -142,6 +143,7 @@ describe("PUT /addStok", function(){
       .put('/v1/product/' + product._id + '/addStok')
       .send(stok)
       .set('Accept', 'application/json');
+      
     assert.equal('data' in res.body, true, "Data response tidak ada");
     assert.equal('stok' in res.body.data, true, "Data stok response tidak ada");
     assert.equal('product' in res.body.data, true, "Data product response tidak ada");
@@ -156,6 +158,6 @@ describe("PUT /addStok", function(){
 });
 
 afterAll(async ()=>{
-  await ProductModel.findByIdAndDelete(product._id);
+  await ProductModel.deleteOne({_id: product._id});
   server.close();
 })
